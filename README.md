@@ -3,15 +3,15 @@
 git clone代码后**第一次运行**, 需要初始化sqlite数据库(只需要执行一次):
 
 ``` bash
-    bash run_at_first_time.sh
+bash run_at_first_time.sh
 ```
 
 查询IP的信息: 经纬度,国家,城市等
 
 ``` bash
-    ./fetch_ip_info.py www.baidu.com
+./fetch_ip_info.py www.baidu.com
 
-    ./fetch_ip_info.py 47.75.51.143
+./fetch_ip_info.py 47.75.51.143
 ```
 
 支持Python 2 和 Python 3.
