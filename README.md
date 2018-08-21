@@ -18,11 +18,12 @@ bash run_at_first_time.sh
 
 ## 数据说明
 
-* [GeoIp数据来源(更新20180327)](https://dev.maxmind.com/geoip/legacy/geolite/)
+* [GeoIP数据来源(更新20180327)](https://dev.maxmind.com/geoip/legacy/geolite/)
 * [chinaz数据来源](http://ip.chinaz.com/ajaxsync.aspx)
 * [国家代号:维基百科](https://zh.wikipedia.org/wiki/%E5%9C%8B%E5%AE%B6%E5%9C%B0%E5%8D%80%E4%BB%A3%E7%A2%BC)
 
 ## 其他链接
 
 * [百度地图经纬度查询](http://api.map.baidu.com/lbsapi/getpoint/index.html)
+* [IPIP查询](https://www.ipip.net/ip.html)
 * [whois查询](https://www.ultratools.com/tools/ipWhoisLookupResult)

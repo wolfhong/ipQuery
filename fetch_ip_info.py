@@ -10,6 +10,7 @@ from multiprocessing import Process, Lock
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "settings")
 
 import requests
+from bs4 import BeautifulSoup
 from ormapp.models import Block, Location
 
 lock = Lock()
@@ -32,15 +33,16 @@ def query_db(ip_str):
         loc = Location.objects.filter(id=block.loc_id).first()
         if loc:
             lock.acquire()
-            sys.stdout.write('GeoIp: ')
+            sys.stdout.write('GeoIP: ')
             print(loc)
+            print('-' * 30)
             lock.release()
 
 
 def query_chinaz(ip_str):
     loc = None
+    url = 'http://ip.chinaz.com/ajaxsync.aspx?at=ipbatch&callback=jq&jdfwkey=oymcy2&ip=%s' % ip_str
     try:
-        url = 'http://ip.chinaz.com/ajaxsync.aspx?at=ipbatch&callback=jq&jdfwkey=oymcy2&ip=%s' % ip_str
         r = requests.post(url, timeout=3)
         left = r.text.index("location:'")
         if left > 0:
@@ -52,9 +54,48 @@ def query_chinaz(ip_str):
         pass
     if loc:
         lock.acquire()
-        sys.stdout.write('Chinaz: ')
+        sys.stdout.write('ip.chinaz.com: ')
         print(loc)
+        print('-' * 30)
         lock.release()
+
+
+def query_ipip(ip_str):
+    url = 'https://labs.ipip.net/location/ip?ip=%s' % ip_str
+    headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/600.8.9 (KHTML, like Gecko) Version/8.0.8 Safari/600.8.9'}
+    try:
+        r = requests.get(url, timeout=3)
+        soup = BeautifulSoup(r.text)
+        rows = soup.find_all('div', attrs={'class': 'row'})
+        if len(rows) >= 3:
+            geo = rows[1].get_text()
+            infos = '/'.join([td.get_text() for td in rows[2].find_all('td')])
+            lock.acquire()
+            print(geo)
+            print(infos)
+            print('visit: %s' % url)
+            print('-' * 30)
+            lock.release()
+    except:
+        pass
+
+
+def query_ip138(ip_str):
+    url = 'http://www.ip138.com/ips1388.asp?ip=%s&action=2' % ip_str
+    try:
+        r = requests.get(url, timeout=3)
+        r.encoding = 'gb2312'
+        soup = BeautifulSoup(r.text)
+        first_li = soup.find_all('ul', attrs={'class': 'ul1'})[0].find('li')
+        if first_li:
+            infos = first_li.get_text().strip('本站数据：')
+            lock.acquire()
+            sys.stdout.write('www.ip138.com: ')
+            print(infos)
+            print('-' * 30)
+            lock.release()
+    except:
+        pass
 
 
 def main():
@@ -63,6 +104,8 @@ def main():
     p_list = []
     p_list.append(Process(target=query_db, args=(ip_str, )))
     p_list.append(Process(target=query_chinaz, args=(ip_str, )))
+    p_list.append(Process(target=query_ipip, args=(ip_str, )))
+    p_list.append(Process(target=query_ip138, args=(ip_str, )))
     [p.start() for p in p_list]
     [p.join() for p in p_list]
 
