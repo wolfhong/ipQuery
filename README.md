@@ -27,3 +27,6 @@ bash run_at_first_time.sh
 * [百度地图经纬度查询](http://api.map.baidu.com/lbsapi/getpoint/index.html)
 * [IPIP查询](https://www.ipip.net/ip.html)
 * [whois查询](https://www.ultratools.com/tools/ipWhoisLookupResult)
+* [中国大陆IP列表](https://www.ip.cn/chnroutes.html)
+* [中国公共DNS列表](https://www.ip.cn/dns.html)
+* [DIG检测](http://whois.xinnet.com/domain/whois_login.jsp#backTop)
