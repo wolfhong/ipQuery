@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
 # minimize django settings
-from __future__ import unicode_literals
 import django
 
 
-SECRET_KEY = b"0123456789"
+SECRET_KEY = "0123456789"
 
 DATABASES = {
     'default' : {

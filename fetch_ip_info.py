@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals
 import re
 import sys
 import os
@@ -51,6 +52,7 @@ def query_chinaz(ip_str):
         pass
     if loc:
         lock.acquire()
+        sys.stdout.write('Chinaz: ')
         print(loc)
         lock.release()
 

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 from django.db import models
+from .utils import code2_to_name, PY3
 
 '''
 Blocks:
@@ -29,7 +30,12 @@ class Location(models.Model):
     area_code = models.CharField(max_length=10)
 
     def __unicode__(self):
-        return "country=%s | region=%s | city=%s | longitude=%s | latitude=%s" % (self.country, self.region, self.city, self.longitude, self.latitude)
+        zh_name = code2_to_name.get(self.country, '')
+        if zh_name:
+            zh_name = '(%s)' % zh_name
+        return "country=%s%s | region=%s | city=%s | longitude=%s | latitude=%s" % \
+                (self.country, zh_name, self.region, self.city, self.longitude, self.latitude)
 
-    def __str__(self):
-        return self.__unicode__()
+if PY3:
+    setattr(Location, '__str__', Location.__unicode__)
+    delattr(Location, '__unicode__')
